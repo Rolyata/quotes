@@ -1,32 +1,38 @@
 require 'spec_helper'
 
-describe "Home page" do
+describe "Static pages" do
 
-	it "should have the title 'Home'" do
-		visit '/static_pages/home'
-		expect(page).to have_title('Quotes')
+	subject { page }
+
+	describe "Home page" do
+		before { visit root_path }
+
+		it { should have_title('Quotes') }
 	end
-end
 
-describe "About page" do
+	describe "About page" do
+		before { visit about_path }
 
-	it "should have the title 'About'" do
-		visit '/static_pages/about'
+		it { should have_title('About') }
+		it { should have_selector('h1', text: 'About the Quotes') }
+		it { should have_selector('h1', text: 'About the Application') }
+		it { should have_selector('h1', text: 'About the Author') }
+	end
+
+	describe "Feedback page" do
+		before { visit feedback_path}
+
+		it { should have_title('Feedback') }
+		it { should have_selector('h1', text: 'Feedback') }
+	end
+
+	it "should have the right links on the layout" do
+		visit root_path
+		click_link "Register"
+		expect(page).to have_title('Register')
+		click_link "About"
 		expect(page).to have_title('About')
-	end
-
-	it "should have the content 'About the Quotes'" do
-		visit '/static_pages/about'
-		expect(page).to have_content('About the Quotes')
-	end
-
-	it "should have the content 'About the Application'" do
-		visit '/static_pages/about'
-		expect(page).to have_content('About the Application')
-	end
-
-	it "should have the content 'About the Author'" do
-		visit '/static_pages/about'
-		expect(page).to have_content('About the Author')
+		click_link "Feedback"
+		expect(page).to have_title('Feedback')
 	end
 end
